@@ -440,7 +440,7 @@ namespace TabloBlazorMain.Server.Controllers
                     {
                         if (regex.IsMatch(cabinet))
                         {
-                            weekClasses.Add(new DayWeekClass { cabinet = cabinet });
+                            weekClasses.Add(new DayWeekClass { cabinet = cabinet, Day = "", teacherMobile = "-" });
                         }
                     }
                 }

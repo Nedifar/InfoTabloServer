@@ -1,4 +1,5 @@
-﻿using InfoTabloServer.Context;
+﻿using InfoTabloServer.BackgroundServices;
+using InfoTabloServer.Context;
 using InfoTabloServer.Models;
 using InfoTabloServer.ViewModels;
 using Microsoft.AspNetCore.Http;
@@ -73,14 +74,11 @@ namespace TabloBlazorMain.Server.Controllers
             return cache.Get("ann") as List<Announcement>;
         }
 
-        //[HttpGet("update")]
-        //public async Task<RequestForDynamicUpdate> DynamicUpdate() //обновить всю страницу
-        //{
-        //    if (GlobalObjects.request == null)
-        //    {
-        //        await AsyncGetMethods.GetUpdate(context);
-        //    }
-        //    return GlobalObjects.request;
-        //}
+        [HttpGet("update")]
+        public async Task<RequestForDynamicUpdate> DynamicUpdate() //обновить всю страницу
+        {
+            var update = await FullUpdateHostedService.GetUpdate(context);
+            return update;
+        }
     }
 }

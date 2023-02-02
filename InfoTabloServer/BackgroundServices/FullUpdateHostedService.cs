@@ -37,11 +37,11 @@ namespace InfoTabloServer.BackgroundServices
                 {
                     Console.WriteLine(ex.Message + "\tFullUpdateHostedService");
                 }
-                await Task.Delay(1000);
+                await Task.Delay(5000);
             }
         }
 
-        public async Task<RequestForDynamicUpdate> GetUpdate(Context.context context)
+        public static async Task<RequestForDynamicUpdate> GetUpdate(Context.context context)
         {
             RequestForDynamicUpdate request = new RequestForDynamicUpdate();
             request.timeNow = DateTime.Now.ToString("HH:mm");
@@ -72,7 +72,7 @@ namespace InfoTabloServer.BackgroundServices
             catch { return request; }
         }
 
-        private RequestForDynamicUpdate FormingMainUpdate(TimeShedule relevantTimeShedule, RequestForDynamicUpdate request)
+        private static RequestForDynamicUpdate FormingMainUpdate(TimeShedule relevantTimeShedule, RequestForDynamicUpdate request)
         {
             try
             {
