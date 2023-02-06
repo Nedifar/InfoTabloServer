@@ -164,7 +164,7 @@ namespace TabloBlazorMain.Server.Controllers
 
                     }
                 }
-                GetTeacherUniversal(teacher, result, currentShedule);
+                fullDayWeekClasses = GetTeacherUniversal(teacher, result, currentShedule);
             }
             return Ok(fullDayWeekClasses);
         }
@@ -220,7 +220,7 @@ namespace TabloBlazorMain.Server.Controllers
 
                     }
                 }
-                GetCabinetUniversal(cabinet, result, currentShedule);
+                fullDayWeekClasses = GetCabinetUniversal(cabinet, result, currentShedule);
             }
             return Ok(fullDayWeekClasses);
         }
@@ -390,8 +390,7 @@ namespace TabloBlazorMain.Server.Controllers
                         regex = new Regex("^4[0-9]{1}[^0-9]{0,1}$");
                         break;
                     default:
-                        regex = new Regex("[0-9]{2,3}");
-                        break;
+                        return Ok(weekClasses);
                 }
                 if (int.TryParse(models.paraNow, out int numberPara) || models.paraNow == "ЧКР")
                 {
@@ -627,7 +626,7 @@ namespace TabloBlazorMain.Server.Controllers
                 }
                 else if ((int)currentShedule.DdownDay.AddDays(j - 1).DayOfWeek == context.SpecialDayWeekNames.FirstOrDefault().dayWeek)
                 {
-                    paras = list.Where(p => p.Name == "ЧКР").FirstOrDefault().OnlyParas.OrderBy(p => p.numberInterval).ToList();
+                    paras = list.FirstOrDefault(p => p.Name == "ЧКР").OnlyParas.OrderBy(p => p.numberInterval).ToList();
                     for (int i = 0; i < paras.Count; i++)
                     {
                         if (paras[i].outGraphicNewTablo == "ЧКР")
@@ -636,7 +635,7 @@ namespace TabloBlazorMain.Server.Controllers
                 }
                 else
                 {
-                    paras = list.Where(p => p.Name == "Основной").FirstOrDefault().OnlyParas.OrderBy(p => p.numberInterval).ToList();
+                    paras = list.FirstOrDefault(p => p.Name == "Основной").OnlyParas.OrderBy(p => p.numberInterval).ToList();
                 }
                 var cab = fullDayWeekClasses[j - 1].dayWeekClasses;
                 var teachers = (List<string>)cache.Get("MainListTeachers");
@@ -655,17 +654,22 @@ namespace TabloBlazorMain.Server.Controllers
                         {
                             if (paras[i].outGraphicNewTablo == "ЧКР")
                                 continue;
-                            cab.Where(p => p.Number.ToString() == paras[i].outGraphicNewTablo).FirstOrDefault().Day = "Начало: " + item.Time.beginTime.ToString("HH:mm") + "\n" + item.Time.SheduleAdditionalLesson.name + "\n" + item.teacherName + "\n" + item.groupName;
+
+                            var currentCabinet = cab.FirstOrDefault(p => p.Number.ToString() == paras[i].outGraphicNewTablo);
+                            currentCabinet.teacherMobile = item.teacherName;
+                            currentCabinet.Day = "Начало: " + item.Time.beginTime.ToString("HH:mm") + "\n" + item.Time.SheduleAdditionalLesson.name + "\n" + item.teacherName + "\n" + item.groupName;
                             for (int l = i; l < paras.Count(); l++)
                             {
+                                var currentCabinetNext = cab.FirstOrDefault(p => p.Number.ToString() == paras[l].outGraphicNewTablo);
                                 if (paras[l].begin.TimeOfDay < item.Time.beginTime.AddMinutes(item.Time.SheduleAdditionalLesson.durationLesson).TimeOfDay)
                                 {
-                                    cab.Where(p => p.Number.ToString() == paras[l].outGraphicNewTablo).FirstOrDefault().Day = item.Time.SheduleAdditionalLesson.name + "\n" + item.teacherName + "\n" + item.groupName;
+                                    currentCabinetNext.Day = item.Time.SheduleAdditionalLesson.name + "\n" + item.teacherName + "\n" + item.groupName;
+                                    currentCabinetNext.teacherMobile = item.teacherName;
                                     if (i == l)
-                                        cab.Where(p => p.Number.ToString() == paras[l].outGraphicNewTablo).FirstOrDefault().Day = "Начало: " + item.Time.beginTime.ToString("HH:mm") + "\n" + cab.Where(p => p.Number.ToString() == paras[l].outGraphicNewTablo).FirstOrDefault().Day;
+                                        currentCabinetNext.Day = "Начало: " + item.Time.beginTime.ToString("HH:mm") + "\n" + currentCabinetNext.Day;
                                     if (paras[l].end.TimeOfDay >= item.Time.beginTime.AddMinutes(item.Time.SheduleAdditionalLesson.durationLesson).TimeOfDay)
                                     {
-                                        cab.Where(p => p.Number.ToString() == paras[l].outGraphicNewTablo).FirstOrDefault().Day += "\n" + "Конец: " + item.Time.beginTime.AddMinutes(item.Time.SheduleAdditionalLesson.durationLesson).ToString("HH:mm");
+                                        currentCabinetNext.Day += "\n" + "Конец: " + item.Time.beginTime.AddMinutes(item.Time.SheduleAdditionalLesson.durationLesson).ToString("HH:mm");
                                     }
                                 }
                             }

@@ -91,17 +91,21 @@ namespace InfoTabloServer.BackgroundServices.SheduleHostedServices
                                 {
                                     if (paras[i].outGraphicNewTablo == "ЧКР")
                                         continue;
-                                    cab.FirstOrDefault(p => p.Number.ToString() == paras[i].outGraphicNewTablo).Day = "Начало: " + item.Time.beginTime.ToString("HH:mm") + "\n" + item.Time.SheduleAdditionalLesson.name + "\n" + item.teacherName + "\n" + item.groupName;
+
+                                    var currentCabinet = cab.FirstOrDefault(p => p.Number.ToString() == paras[i].outGraphicNewTablo);
+
+                                    currentCabinet.Day = "Начало: " + item.Time.beginTime.ToString("HH:mm") + "\n" + item.Time.SheduleAdditionalLesson.name + "\n" + item.teacherName + "\n" + item.groupName;
                                     for (int j = i; j < paras.Count(); j++)
                                     {
+                                        var currentCabinetNext = cab.FirstOrDefault(p => p.Number.ToString() == paras[j].outGraphicNewTablo);
                                         if (paras[j].begin.TimeOfDay < item.Time.beginTime.AddMinutes(item.Time.SheduleAdditionalLesson.durationLesson).TimeOfDay)
                                         {
-                                            cab.FirstOrDefault(p => p.Number.ToString() == paras[j].outGraphicNewTablo).Day = item.Time.SheduleAdditionalLesson.name + "\n" + item.teacherName + "\n" + item.groupName;
+                                            currentCabinetNext.Day = item.Time.SheduleAdditionalLesson.name + "\n" + item.teacherName + "\n" + item.groupName;
                                             if (i == j)
-                                                cab.FirstOrDefault(p => p.Number.ToString() == paras[j].outGraphicNewTablo).Day = "Начало: " + item.Time.beginTime.ToString("HH:mm") + "\n" + cab.Where(p => p.Number.ToString() == paras[j].outGraphicNewTablo).FirstOrDefault().Day;
+                                                currentCabinetNext.Day = "Начало: " + item.Time.beginTime.ToString("HH:mm") + "\n" + currentCabinetNext.Day;
                                             if (paras[j].end.TimeOfDay >= item.Time.beginTime.AddMinutes(item.Time.SheduleAdditionalLesson.durationLesson).TimeOfDay)
                                             {
-                                                cab.FirstOrDefault(p => p.Number.ToString() == paras[j].outGraphicNewTablo).Day += "\n" + "Конец: " + item.Time.beginTime.AddMinutes(item.Time.SheduleAdditionalLesson.durationLesson).ToString("HH:mm");
+                                                currentCabinetNext.Day += "\n" + "Конец: " + item.Time.beginTime.AddMinutes(item.Time.SheduleAdditionalLesson.durationLesson).ToString("HH:mm");
                                             }
                                         }
                                     }
@@ -116,12 +120,12 @@ namespace InfoTabloServer.BackgroundServices.SheduleHostedServices
                             int l = 1;
                             if (i is 0)
                                 l--;
-                            for (int j = 0; j < floorCabinets[i].DayWeeks.Count(); j++)
+                            for (int j = 0; j < floorCabinets[i].DayWeeks.Count; j++)
                             {
                                 if (floorCabinets[i].DayWeeks[j].decipline.Trim().Length <= 2 || floorCabinets[i].DayWeeks[j].decipline == "ЧКР")
                                 {
                                     floorCabinets[i].DayWeeks[j].pp = "Пусто";
-                                    if (j + 1 == floorCabinets[i].DayWeeks.Count())
+                                    if (j + 1 == floorCabinets[i].DayWeeks.Count)
                                         break;
                                     if (floorCabinets[i].DayWeeks[j + 1].Number == l + 1 || floorCabinets[i].DayWeeks[j].Number == null)
                                     {

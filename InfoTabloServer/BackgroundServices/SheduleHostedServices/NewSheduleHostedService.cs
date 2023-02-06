@@ -1,8 +1,8 @@
-﻿using ClosedXML.Excel;
+﻿using Aspose.Cells;
+using ClosedXML.Excel;
 using HtmlAgilityPack;
 using InfoTabloServer.LastDanceResources;
 using Microsoft.Extensions.Caching.Memory;
-using Spire.Xls;
 using System.Net;
 
 namespace InfoTabloServer.BackgroundServices.SheduleHostedServices
@@ -61,12 +61,11 @@ namespace InfoTabloServer.BackgroundServices.SheduleHostedServices
                                         {
                                             href = node.Attributes["href"].Value;
                                             value = node.InnerText;
-                                            using (WebClient web = new WebClient())
+                                            using (WebClient web = new())
                                             {
                                                 web.DownloadFile($"https://oksei.ru{href}", nextWeekPath + ".xls");
-                                                Workbook workbook2 = new();
-                                                workbook2.LoadFromFile($"{nextWeekPath}.xls");
-                                                workbook2.SaveToFile($"{nextWeekPath}.xlsx", ExcelVersion.Version2013);
+                                                Workbook workbook2 = new($"{nextWeekPath}.xls");
+                                                workbook2.Save($"{nextWeekPath}.xlsx", SaveFormat.Xlsx);
                                                 xl = new XLWorkbook(nextWeekPath + ".xlsx");
                                                 cache.Set("xLNew", xl.Worksheets.First(), new MemoryCacheEntryOptions { AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5) });
                                                 using (var streame = new StreamWriter($"{AppDomain.CurrentDomain.BaseDirectory}Raspisanie/Formats.txt", false))

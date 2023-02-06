@@ -1,7 +1,7 @@
-﻿using ClosedXML.Excel;
+﻿using Aspose.Cells;
+using ClosedXML.Excel;
 using HtmlAgilityPack;
 using InfoTabloServer.ViewModels;
-using Spire.Xls;
 using System.Globalization;
 using System.Net;
 using System.Text.RegularExpressions;
@@ -189,9 +189,8 @@ namespace InfoTabloServer.LastDanceResources
                                 {
                                     var href = nodeForNeedDate.Attributes["href"].Value;
                                     web.DownloadFile(@$"https://oksei.ru{href}", $"{savePath}.xls");
-                                    Workbook workbook2 = new();
-                                    workbook2.LoadFromFile($"{savePath}.xls");
-                                    workbook2.SaveToFile($"{savePath}.xlsx", ExcelVersion.Version2013);
+                                    Workbook workbook2 = new($"{savePath}.xls");
+                                    workbook2.Save($"{savePath}.xlsx", SaveFormat.Xlsx);
                                     XLWorkbook xL = new XLWorkbook($"{savePath}.xlsx");
                                     RaspisanieIzm(xL, i, xi);
 

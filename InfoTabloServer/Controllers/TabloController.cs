@@ -57,8 +57,7 @@ namespace TabloBlazorMain.Server.Controllers
         [HttpGet("announc")]
         public List<Announcement> getAnnouncment() //вернуть все объявления
         {
-            List<Announcement> linka;
-            if (!cache.TryGetValue("ann", out linka))
+            if (!cache.TryGetValue("ann", out List<Announcement> linka))
             {
                 var list = context.Announcements.ToList();
                 linka = new List<Announcement>();

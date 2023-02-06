@@ -94,7 +94,7 @@ namespace InfoTabloServer.BackgroundServices
                     request.tbNumberPara = $"До начала пар {Math.Ceiling((rrList[0].begin.TimeOfDay - DateTime.Now.TimeOfDay).TotalMinutes)} мин.";
                 }
                 else
-                    request.tbNumberPara = "На сегодня пары еще не начались.";
+                    request.tbNumberPara = "Пары не начались";
                 request.labelPara = "";
                 return request;
             }
@@ -103,7 +103,7 @@ namespace InfoTabloServer.BackgroundServices
             if (rrList.LastOrDefault().end.TimeOfDay < DateTime.Now.TimeOfDay)
             {
                 request.lineMarginTop = request.grLineHeight - 1;
-                request.tbNumberPara = "На сегодня занятия закончились.";
+                request.tbNumberPara = "Занятия закончились";
                 request.labelPara = "";
                 return request;
             }
