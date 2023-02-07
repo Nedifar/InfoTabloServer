@@ -28,8 +28,8 @@ namespace InfoTabloServer.BackgroundServices
                     var _terminalService = scope.ServiceProvider.GetRequiredService<Context.context>();
                     context = _terminalService;
                     var ll = context.MonthYear.ToList();
-                    string result = context.MonthYear.Where(p => p.date.Year == DateTime.Now.Year && p.date.Month == DateTime.Now.Month).FirstOrDefault().getSupervisorNow;
-                    cache.Set("admin", result, new MemoryCacheEntryOptions { AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(15) });
+                    string result = context.MonthYear.FirstOrDefault(p => p.date.Year == DateTime.Now.Year && p.date.Month == DateTime.Now.Month)?.getSupervisorNow;
+                    cache.Set("admin", result??"", new MemoryCacheEntryOptions { AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(15) });
                     await _hubContext.Clients.All.SendAsync("SendAdmin", cache.Get("admin"));
                 }
                 catch (Exception ex)

@@ -12,9 +12,11 @@ string connectionString = "Host=192.168.147.69; port=5432; DataBase=InformationT
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy",
-        builder => builder.AllowAnyOrigin().
-        AllowAnyHeader().
-        AllowAnyMethod());
+        builder => builder
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowCredentials()
+        .WithOrigins("http://localhost:3000", "http://infotab.okeit.edu", "https://infotab.oksei.ru"));
 });
 builder.Services.AddDbContext<context>(options => options.UseNpgsql(connectionString).UseLazyLoadingProxies());
 builder.Services.AddControllers();

@@ -109,8 +109,8 @@ namespace TabloBlazorMain.Server.Controllers
 
                     }
                 }
-                fullDayWeekClasses = GetGroupUniversal(group, result, currentShedule);
             }
+            fullDayWeekClasses = GetGroupUniversal(group, result, currentShedule);
             return Ok(fullDayWeekClasses);
         }
 
@@ -164,8 +164,8 @@ namespace TabloBlazorMain.Server.Controllers
 
                     }
                 }
-                fullDayWeekClasses = GetTeacherUniversal(teacher, result, currentShedule);
             }
+            fullDayWeekClasses = GetTeacherUniversal(teacher, result, currentShedule);
             return Ok(fullDayWeekClasses);
         }
 
@@ -220,8 +220,8 @@ namespace TabloBlazorMain.Server.Controllers
 
                     }
                 }
-                fullDayWeekClasses = GetCabinetUniversal(cabinet, result, currentShedule);
             }
+            fullDayWeekClasses = GetCabinetUniversal(cabinet, result, currentShedule);
             return Ok(fullDayWeekClasses);
         }
 
