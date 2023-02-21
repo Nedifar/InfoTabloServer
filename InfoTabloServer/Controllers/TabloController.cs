@@ -79,5 +79,34 @@ namespace TabloBlazorMain.Server.Controllers
             var update = await FullUpdateHostedService.GetUpdate(context);
             return update;
         }
+
+        [HttpPost("upload")]
+        public async Task<ActionResult> UploadBackgroundInfoTablo(BackgroundUploadModelView model)
+        {
+            if (model.uploadFile == null)
+            {
+                return BadRequest("Выберите файл для загрузки.");
+            }
+            var extension = model.uploadFile.FileName.Split('.').LastOrDefault();
+            string path = @"background\";
+
+            if (model.typeUpload == BackgroundUploadTypes.Main)
+            {
+                using (var fileStream = new FileStream(path + "main." + extension, FileMode.Create))
+                {
+                    await model.uploadFile.CopyToAsync(fileStream);
+                }
+            }
+
+            if (model.typeUpload == BackgroundUploadTypes.Other)
+            {
+                using (var fileStream = new FileStream(path + "special" + model.dateTarget.ToShortDateString() + "." + extension, FileMode.Create))
+                {
+                    await model.uploadFile.CopyToAsync(fileStream);
+                }
+            }
+
+            return Ok();
+        }
     }
 }

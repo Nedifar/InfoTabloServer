@@ -4,6 +4,7 @@ using InfoTabloServer.Context;
 using InfoTabloServer.SiganlR;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,16 +17,18 @@ builder.Services.AddCors(options =>
         .AllowAnyMethod()
         .AllowAnyHeader()
         .AllowCredentials()
-        .WithOrigins("http://localhost:3000", "http://infotab.okeit.edu", "https://infotab.oksei.ru"));
+        .WithOrigins("http://localhost:3000", "http://infotab.okeit.edu", "https://infotab.oksei.ru", "http://localhost:5014"));
 });
+
+builder.Environment.WebRootPath = "background";
 builder.Services.AddDbContext<context>(options => options.UseNpgsql(connectionString).UseLazyLoadingProxies());
 builder.Services.AddControllers();
 builder.Services.AddSignalR(p =>
 {
     p.EnableDetailedErrors = true;
-    p.ClientTimeoutInterval = System.TimeSpan.FromMinutes(1);
-    p.HandshakeTimeout = System.TimeSpan.FromSeconds(30);
-    p.KeepAliveInterval = System.TimeSpan.FromSeconds(30);
+    p.ClientTimeoutInterval = TimeSpan.FromMinutes(1);
+    p.HandshakeTimeout = TimeSpan.FromSeconds(30);
+    p.KeepAliveInterval = TimeSpan.FromSeconds(30);
 }
 );
 builder.Services.AddResponseCompression(opts =>
