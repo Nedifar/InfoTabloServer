@@ -4,6 +4,7 @@ using InfoTabloServer.Models;
 using InfoTabloServer.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
@@ -80,32 +81,64 @@ namespace TabloBlazorMain.Server.Controllers
             return update;
         }
 
+        [HttpGet("getBackgroundMedia")]
+        public async Task<ActionResult> GetBackgroundMedia()
+        {
+            while (cache.Get("backImage") == null)
+            { }
+            return Ok(cache.Get("backImage").ToString());
+        }
+
         [HttpPost("upload")]
-        public async Task<ActionResult> UploadBackgroundInfoTablo(BackgroundUploadModelView model)
+        public async Task<ActionResult> UploadBackgroundInfoTablo([FromForm] BackgroundUploadModelView model)
         {
             if (model.uploadFile == null)
             {
                 return BadRequest("Выберите файл для загрузки.");
             }
             var extension = model.uploadFile.FileName.Split('.').LastOrDefault();
-            string path = @"background\";
+            string path = AppDomain.CurrentDomain.BaseDirectory + @"background\";
 
             if (model.typeUpload == BackgroundUploadTypes.Main)
             {
                 using (var fileStream = new FileStream(path + "main." + extension, FileMode.Create))
                 {
                     await model.uploadFile.CopyToAsync(fileStream);
+                    context.SpecialBackgroundPhotos.FirstOrDefault(p => p.targetDate == null).fileName = "main." + extension;
                 }
             }
 
-            if (model.typeUpload == BackgroundUploadTypes.Other)
+            else if (model.typeUpload == BackgroundUploadTypes.Other)
             {
                 using (var fileStream = new FileStream(path + "special" + model.dateTarget.ToShortDateString() + "." + extension, FileMode.Create))
                 {
                     await model.uploadFile.CopyToAsync(fileStream);
+                    var currentModel = context.SpecialBackgroundPhotos
+                        .ToList()
+                        .FirstOrDefault(p => p.targetDate.HasValue && p.targetDate.Value.ToString("dd.MM.yyyy") == model.dateTarget.ToString("dd.MM.yyyy"));
+                    if (currentModel == null)
+                    {
+                        currentModel = new SpecialBackgroundPhoto
+                        {
+                            fileName = "special" + model.dateTarget.ToShortDateString() + "." + extension,
+                            targetDate = model.dateTarget.Date
+                        };
+                        context.SpecialBackgroundPhotos.Add(currentModel);
+                    }
+                    else
+                    {
+                        currentModel.fileName = "special" + model.dateTarget.ToShortDateString() + "." + extension;
+                    }
                 }
             }
+            try
+            {
+                await context.SaveChangesAsync();
+            }
+            catch(Exception ex) 
+            { 
 
+            }
             return Ok();
         }
     }

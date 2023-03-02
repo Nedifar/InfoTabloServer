@@ -6,7 +6,11 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(new WebApplicationOptions
+{
+    Args = args,
+    WebRootPath = "background"
+});
 
 string connectionString = "Host=192.168.147.69; port=5432; DataBase=InformationTabloBase; username=postgres; password=nw6Gs79d";
 
@@ -20,9 +24,12 @@ builder.Services.AddCors(options =>
         .WithOrigins("http://localhost:3000", "http://infotab.okeit.edu", "https://infotab.oksei.ru", "http://localhost:5014"));
 });
 
-builder.Environment.WebRootPath = "background";
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
+builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<context>(options => options.UseNpgsql(connectionString).UseLazyLoadingProxies());
 builder.Services.AddControllers();
+
 builder.Services.AddSignalR(p =>
 {
     p.EnableDetailedErrors = true;
@@ -31,6 +38,7 @@ builder.Services.AddSignalR(p =>
     p.KeepAliveInterval = TimeSpan.FromSeconds(30);
 }
 );
+
 builder.Services.AddResponseCompression(opts =>
 {
     opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
@@ -38,6 +46,7 @@ builder.Services.AddResponseCompression(opts =>
 });
 
 builder.Services.AddHostedService<MainSheduleHostedService>();
+builder.Services.AddHostedService<BackgroundImageBackService>();
 builder.Services.AddHostedService<NewSheduleHostedService>();
 builder.Services.AddHostedService<FloorSheduleHostedService>();
 builder.Services.AddHostedService<WeekNameHostedService>();
@@ -50,9 +59,16 @@ builder.Services.AddHostedService<WeatherHostedService>();
 builder.Services.AddMemoryCache();
 var app = builder.Build();
 
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
 app.UseCors("CorsPolicy");
 app.UseResponseCompression();
 app.UseDeveloperExceptionPage();
+app.UseStaticFiles();
 
 app.UseRouting();
 

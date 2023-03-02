@@ -25,11 +25,15 @@ C:\Users\SU\source\repos\InfoTabloServer\InfoTabloServer\obj\Release\net6.0\PubT
 C:\Users\SU\source\repos\InfoTabloServer\InfoTabloServer\obj\Release\net6.0\PubTmp\Out\Microsoft.Extensions.Logging.Abstractions.dll
 C:\Users\SU\source\repos\InfoTabloServer\InfoTabloServer\obj\Release\net6.0\PubTmp\Out\Microsoft.Extensions.Options.dll
 C:\Users\SU\source\repos\InfoTabloServer\InfoTabloServer\obj\Release\net6.0\PubTmp\Out\Microsoft.Extensions.Primitives.dll
+C:\Users\SU\source\repos\InfoTabloServer\InfoTabloServer\obj\Release\net6.0\PubTmp\Out\Microsoft.OpenApi.dll
 C:\Users\SU\source\repos\InfoTabloServer\InfoTabloServer\obj\Release\net6.0\PubTmp\Out\Newtonsoft.Json.dll
 C:\Users\SU\source\repos\InfoTabloServer\InfoTabloServer\obj\Release\net6.0\PubTmp\Out\Npgsql.dll
 C:\Users\SU\source\repos\InfoTabloServer\InfoTabloServer\obj\Release\net6.0\PubTmp\Out\Npgsql.EntityFrameworkCore.PostgreSQL.dll
 C:\Users\SU\source\repos\InfoTabloServer\InfoTabloServer\obj\Release\net6.0\PubTmp\Out\SixLabors.Fonts.dll
 C:\Users\SU\source\repos\InfoTabloServer\InfoTabloServer\obj\Release\net6.0\PubTmp\Out\SkiaSharp.dll
+C:\Users\SU\source\repos\InfoTabloServer\InfoTabloServer\obj\Release\net6.0\PubTmp\Out\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\SU\source\repos\InfoTabloServer\InfoTabloServer\obj\Release\net6.0\PubTmp\Out\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Users\SU\source\repos\InfoTabloServer\InfoTabloServer\obj\Release\net6.0\PubTmp\Out\Swashbuckle.AspNetCore.SwaggerUI.dll
 C:\Users\SU\source\repos\InfoTabloServer\InfoTabloServer\obj\Release\net6.0\PubTmp\Out\System.IO.Packaging.dll
 C:\Users\SU\source\repos\InfoTabloServer\InfoTabloServer\obj\Release\net6.0\PubTmp\Out\System.Security.Cryptography.Pkcs.dll
 C:\Users\SU\source\repos\InfoTabloServer\InfoTabloServer\obj\Release\net6.0\PubTmp\Out\XLParser.dll

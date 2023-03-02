@@ -21,6 +21,7 @@ namespace InfoTabloServer.Context
         public DbSet<SpecialDayWeekName> SpecialDayWeekNames { get; set; }
         public DbSet<TypeInterval> TypeIntervals { get; set; }
         public DbSet<Para> Paras { get; set; }
+        public DbSet<SpecialBackgroundPhoto> SpecialBackgroundPhotos { get; set; }
         public DbSet<Time> Times { get; set; }
         public DbSet<Lesson> Lessons { get; set; }
         public DbSet<SheduleAdditionalLesson> SheduleAdditionalLessons { get; set; }
