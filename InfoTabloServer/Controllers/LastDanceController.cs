@@ -192,7 +192,7 @@ namespace TabloBlazorMain.Server.Controllers
                     {
                         return NotFound("Расписание для данной недели не найдено. Повторить поиск?");
                     }
-                    
+
                 }
                 else
                 {
@@ -229,114 +229,126 @@ namespace TabloBlazorMain.Server.Controllers
         [Route("getcabinetsList")]
         public ActionResult<IEnumerable<List<string>>> Get(DateTime date) //вернуть список кабиентов
         {
-            var listResult = new List<string>();
-            if (DateTime.UtcNow.AddHours(5).Date == date)
+            try
             {
-                while (listResult.Count() == 0)
+                var listResult = new List<string>();
+                if (DateTime.UtcNow.AddHours(5).Date == date)
                 {
-                    listResult = (List<string>)cache.Get("MainListCabinets");
-                }
-            }
-            else if (DateTime.UtcNow.AddHours(5).Date.AddDays(7) == date)
-            {
-                while (listResult.Count() == 0)
-                {
-                    listResult = (List<string>)cache.Get("NewListCabinets");
-                    if (listResult == null)
+                    while (listResult.Count() == 0)
                     {
-                        return Ok(new List<string>());
+                        listResult = (List<string>)cache.Get("MainListCabinets");
                     }
                 }
-            }
-            else
-            {
-                var lp = new Shedule(date).SpecialSheduleReturn();
-                if (lp == null)
-                    return Ok(null);
-                listResult = lp.Cabinets;
-                while (lp.Cabinets == null)
+                else if (DateTime.UtcNow.AddHours(5).Date.AddDays(7) == date)
                 {
-                    listResult = lp.Cabinets;
+                    while (listResult.Count() == 0)
+                    {
+                        listResult = (List<string>)cache.Get("NewListCabinets");
+                        if (listResult == null)
+                        {
+                            return Ok(new List<string>());
+                        }
+                    }
                 }
-            }
+                else
+                {
+                    var lp = new Shedule(date).SpecialSheduleReturn();
+                    if (lp == null)
+                        return Ok(null);
+                    listResult = lp.Cabinets;
+                    while (lp.Cabinets == null)
+                    {
+                        listResult = lp.Cabinets;
+                    }
+                }
 
-            return Ok(listResult);
+                return Ok(listResult);
+            }
+            catch (Exception ex) { return BadRequest(ex.Message); }
         }
 
         [HttpGet]
         [Route("getteachersList")]
         public ActionResult<IEnumerable<List<string>>> GetTeachersList(DateTime date) //вернуть список кабиентов
         {
-            var listResult = new List<string>();
-            if (DateTime.UtcNow.AddHours(5).Date == date)
+            try
             {
-                while (listResult.Count() == 0)
+                var listResult = new List<string>();
+                if (DateTime.UtcNow.AddHours(5).Date == date)
                 {
-                    listResult = (List<string>)cache.Get("MainListTeachers");
-                }
-            }
-            else if (DateTime.UtcNow.AddHours(5).Date.AddDays(7) == date)
-            {
-                while (listResult.Count() == 0)
-                {
-                    listResult = (List<string>)cache.Get("NewListTeachers");
-                    if (listResult == null)
+                    while (listResult.Count() == 0)
                     {
-                        return Ok(new List<string>());
+                        listResult = (List<string>)cache.Get("MainListTeachers");
                     }
                 }
-            }
-            else
-            {
-                var lp = new Shedule(date).SpecialSheduleReturn();
-                if (lp == null)
-                    return Ok(null);
-                listResult = lp.Teachers;
-                while (lp.Teachers == null)
+                else if (DateTime.UtcNow.AddHours(5).Date.AddDays(7) == date)
                 {
-                    listResult = lp.Teachers;
+                    while (listResult.Count() == 0)
+                    {
+                        listResult = (List<string>)cache.Get("NewListTeachers");
+                        if (listResult == null)
+                        {
+                            return Ok(new List<string>());
+                        }
+                    }
                 }
-            }
+                else
+                {
+                    var lp = new Shedule(date).SpecialSheduleReturn();
+                    if (lp == null)
+                        return Ok(null);
+                    listResult = lp.Teachers;
+                    while (lp.Teachers == null)
+                    {
+                        listResult = lp.Teachers;
+                    }
+                }
 
-            return Ok(listResult);
+                return Ok(listResult);
+            }
+            catch (Exception ex) { return BadRequest(ex.Message); }
         }
 
         [HttpGet]
         [Route("getgroupsList")]
         public ActionResult<IEnumerable<List<string>>> get(DateTime date) //вернуть список групп
         {
-            var listResult = new List<string>();
-            if (DateTime.UtcNow.AddHours(5).Date == date)
+            try
             {
-                while (listResult.Count() == 0)
+                var listResult = new List<string>();
+                if (DateTime.UtcNow.AddHours(5).Date == date)
                 {
-                    listResult = (List<string>)cache.Get("MainListGroups");
-                }
-            }
-            else if (DateTime.UtcNow.AddHours(5).Date.AddDays(7) == date)
-            {
-                while (listResult.Count() == 0)
-                {
-                    listResult = (List<string>)cache.Get("NewListGroups");
-                    if (listResult == null)
+                    while (listResult.Count() == 0)
                     {
-                        return Ok(new List<string>());
+                        listResult = (List<string>)cache.Get("MainListGroups");
                     }
                 }
-            }
-            else
-            {
-                var lp = new Shedule(date).SpecialSheduleReturn();
-                if (lp == null)
-                    return Ok(null);
-                listResult = lp.Groups;
-                while (lp.Groups == null)
+                else if (DateTime.UtcNow.AddHours(5).Date.AddDays(7) == date)
                 {
-                    listResult = lp.Groups;
+                    while (listResult.Count() == 0)
+                    {
+                        listResult = (List<string>)cache.Get("NewListGroups");
+                        if (listResult == null)
+                        {
+                            return Ok(new List<string>());
+                        }
+                    }
                 }
-            }
+                else
+                {
+                    var lp = new Shedule(date).SpecialSheduleReturn();
+                    if (lp == null)
+                        return Ok(null);
+                    listResult = lp.Groups;
+                    while (lp.Groups == null)
+                    {
+                        listResult = lp.Groups;
+                    }
+                }
 
-            return Ok(listResult);
+                return Ok(listResult);
+            }
+            catch (Exception ex) { return BadRequest(ex.Message); }
         }
 
         [HttpPost]
